@@ -44,4 +44,3 @@ Here is a list of error codes:
 * WRONG_PASSWORD
 * SYS_NO_DOSU_GROUP
 * USR_NO_DOSU_GROUP
-* CANNOT_EXECUTE: *error message*
