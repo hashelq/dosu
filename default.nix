@@ -1,5 +1,5 @@
+{ lib, pkgs, ... }:
 let
-    pkgs = (import <nixpkgs>) {};
     gcc = pkgs.gcc;
     stdenv = pkgs.stdenv;
 in stdenv.mkDerivation {
