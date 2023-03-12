@@ -51,7 +51,12 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-  char *password = getpass("");
+  const char* prompt = getenv("DOSU_PROMPT");
+  if (prompt == NULL) {
+	// No prompt
+	prompt = "";
+  }
+  char *password = getpass(prompt);
 
   struct spwd *spw = getspnam(getlogin());
   if (spw == NULL) {
