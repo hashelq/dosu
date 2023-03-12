@@ -46,11 +46,16 @@ void putenv_var(char* key, char* value) {
 
   int size = (len_k + len_v + 1 + 1);
   char* new = malloc(sizeof(char) * size);
+  if (new == NULL) {
+	fprintf(stderr, "MALLOC_FAILED");
+	exit(-1);
+  }
   memcpy(new, key, len_k);
   new[len_k] = '=';
   memcpy(new + len_k + 1, value, len_v);
   new[size - 1] = '\0';
   putenv(new);
+  free(new);
 }
 
 int main(int argc, char *argv[]) {
@@ -73,6 +78,10 @@ int main(int argc, char *argv[]) {
 
   struct spwd *spw = getspnam(getlogin());
   if (spw == NULL) {
+	fprintf(stderr, "GETSPNAM_FAILED");
+	exit(-1);
+  }
+  if (spw == NULL) {
     fprintf(stderr, "NO_PASSWORD\n");
     exit(EXIT_FAILURE);
   }
@@ -83,7 +92,11 @@ int main(int argc, char *argv[]) {
   }
 
   int num_groups = getgroups(0, NULL);
-  
+  if (num_groups == -1) {
+	fprintf(stderr, "GETGROUPS_FAILED");
+	exit(-1);
+  }
+
   gid_t *groups = malloc(num_groups * sizeof(gid_t));
   int status = getgroups(num_groups, groups);
   
@@ -123,6 +136,10 @@ int main(int argc, char *argv[]) {
 
   // env vars
   struct passwd *pwd = getpwnam("root");
+  if (pwd == NULL) {
+	fprintf(stderr, "GETPWNAM_FAILED");
+	exit(-1);
+  }
   putenv_var("USER", "root");
   putenv_var("LOGNAME", "root");
   putenv_var("HOME", pwd->pw_dir);
