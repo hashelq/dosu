@@ -1,31 +1,31 @@
+#include <errno.h>
+#include <grp.h>
+#include <pwd.h>
+#include <shadow.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/types.h>
-#include <pwd.h>
-#include <shadow.h>
-#include <grp.h>
-#include <errno.h>
-#include <signal.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
 int execute_command(char* args[]) {
   pid_t pid = fork();
 
   // if err
   if (pid == -1) {
-      perror(0); 
-      return -1;
+    perror(0);
+    return -1;
   }
 
   // child
   if (pid == 0) {
     if (setuid(0) < 0) {
-	  perror("SETUID");
+      perror("SETUID");
       exit(EXIT_FAILURE);
     }
-	execvp(args[0], args);
+    execvp(args[0], args);
     perror(0);
     _exit(127);
   }
@@ -33,8 +33,8 @@ int execute_command(char* args[]) {
   // parent wait
   siginfo_t info;
   if (0 > waitid(P_PID, pid, &info, WEXITED)) {
-      perror(0);
-      return -1;
+    perror(0);
+    return -1;
   }
 
   return info.si_status;
@@ -47,8 +47,8 @@ void putenv_var(char* key, char* value) {
   int size = (len_k + len_v + 1 + 1);
   char* new = malloc(sizeof(char) * size);
   if (new == NULL) {
-	fprintf(stderr, "MALLOC_FAILED");
-	exit(-1);
+    fprintf(stderr, "MALLOC_FAILED");
+    exit(-1);
   }
   memcpy(new, key, len_k);
   new[len_k] = '=';
@@ -58,10 +58,10 @@ void putenv_var(char* key, char* value) {
   free(new);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   if (argc < 2) {
-	fprintf(stderr, "NO_CMD\n");
-	exit(1);
+    fprintf(stderr, "NO_CMD\n");
+    exit(1);
   }
 
   if (geteuid() != 0) {
@@ -71,15 +71,15 @@ int main(int argc, char *argv[]) {
 
   const char* prompt = getenv("DOSU_PROMPT");
   if (prompt == NULL) {
-	// No prompt
-	prompt = "";
+    // No prompt
+    prompt = "";
   }
-  char *password = getpass(prompt);
+  char* password = getpass(prompt);
 
-  struct spwd *spw = getspnam(getlogin());
+  struct spwd* spw = getspnam(getlogin());
   if (spw == NULL) {
-	fprintf(stderr, "GETSPNAM_FAILED");
-	exit(-1);
+    fprintf(stderr, "GETSPNAM_FAILED");
+    exit(-1);
   }
   if (spw == NULL) {
     fprintf(stderr, "NO_PASSWORD\n");
@@ -93,30 +93,30 @@ int main(int argc, char *argv[]) {
 
   int num_groups = getgroups(0, NULL);
   if (num_groups == -1) {
-	fprintf(stderr, "GETGROUPS_FAILED");
-	exit(-1);
+    fprintf(stderr, "GETGROUPS_FAILED");
+    exit(-1);
   }
 
-  gid_t *groups = malloc(num_groups * sizeof(gid_t));
+  gid_t* groups = malloc(num_groups * sizeof(gid_t));
   int status = getgroups(num_groups, groups);
-  
+
   if (status == -1) {
-	perror("GETGROUPS_FAILED");
-	exit(EXIT_FAILURE);
+    perror("GETGROUPS_FAILED");
+    exit(EXIT_FAILURE);
   }
 
   struct group* grp = getgrnam("dosu");
   if (grp == NULL) {
-	fprintf(stderr, "SYS_NO_DOSU_GROUP\n");
-	exit(EXIT_FAILURE);
+    fprintf(stderr, "SYS_NO_DOSU_GROUP\n");
+    exit(EXIT_FAILURE);
   }
 
   char access = 0;
   for (int i = 0; i < num_groups; i++) {
-	if (groups[i] == grp->gr_gid) {
-	  access = 1;
-	  break;
-	}
+    if (groups[i] == grp->gr_gid) {
+      access = 1;
+      break;
+    }
   }
 
   if (access == 0) {
@@ -128,17 +128,17 @@ int main(int argc, char *argv[]) {
   char** exec_args = malloc(sizeof(char*) * argc);
 
   for (int i = 0; i < argc - 1; i++) {
-	exec_args[i] = argv[i + 1];
+    exec_args[i] = argv[i + 1];
   }
 
   // NULL at the end
   exec_args[argc - 1] = NULL;
 
   // env vars
-  struct passwd *pwd = getpwnam("root");
+  struct passwd* pwd = getpwnam("root");
   if (pwd == NULL) {
-	fprintf(stderr, "GETPWNAM_FAILED");
-	exit(-1);
+    fprintf(stderr, "GETPWNAM_FAILED");
+    exit(-1);
   }
   putenv_var("USER", "root");
   putenv_var("LOGNAME", "root");
