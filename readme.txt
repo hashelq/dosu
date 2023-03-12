@@ -5,7 +5,12 @@ Written by: HASHELQ
 LICENSE: MIT
 
 This is a sudo alternative in case you need a simple bloat-free program for this task.
-There are no settings, prompts and anything else!
+
+Environment:
+	DOSU_PROMPT to set custom prompt, for example:
+
+	$ DOSU_PROMPT="[DOSU] Enter password: " dosu echo 123
+	[DOSU] Enter password:
 
 SECURITY:
 	I am not sure that this program is secure.
@@ -26,7 +31,7 @@ Usage:
 	dosu <any program> <any other argument>
 
 Note:
-	There is no a prompt.
+	There is no a prompt by default.
 	Just type your password after you run the program.
 
 In other cases, it returns an uppercased error code.
