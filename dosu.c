@@ -40,6 +40,19 @@ int execute_command(char* args[]) {
   return info.si_status;
 }
 
+void putenv_var(char* key, char* value) {
+  int len_k = strlen(key);
+  int len_v = strlen(value);
+
+  int size = (len_k + len_v + 1 + 1);
+  char* new = malloc(sizeof(char) * size);
+  memcpy(new, key, len_k);
+  new[len_k] = '=';
+  memcpy(new + len_k + 1, value, len_v);
+  new[size - 1] = '\0';
+  putenv(new);
+}
+
 int main(int argc, char *argv[]) {
   if (argc < 2) {
 	fprintf(stderr, "NO_CMD\n");
@@ -107,6 +120,12 @@ int main(int argc, char *argv[]) {
 
   // NULL at the end
   exec_args[argc - 1] = NULL;
+
+  // env vars
+  struct passwd *pwd = getpwnam("root");
+  putenv_var("USER", "root");
+  putenv_var("LOGNAME", "root");
+  putenv_var("HOME", pwd->pw_dir);
 
   return execute_command(exec_args);
 }
