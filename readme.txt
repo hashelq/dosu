@@ -15,7 +15,7 @@ SECURITY:
 
 SUID:
 	This program is intended to be run with +s permission (setuid).
-	Before using it, add +s: "chmod +s ./dosu"
+	Before using it, add +s and change owner to root: "chmod +s ./dosu ; chown root:root ./dosu"
 
 This is a short program that
 	1. Checks if the user has group "dosu"
