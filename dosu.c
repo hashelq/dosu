@@ -108,12 +108,5 @@ int main(int argc, char *argv[]) {
   // NULL at the end
   exec_args[argc - 1] = NULL;
 
-  int ex_status = execute_command(exec_args);
-
-  if (ex_status != 0) {
-	perror("CANNOT_EXECUTE");
-	exit(EXIT_FAILURE);
-  }
-
-  return 0;
+  return execute_command(exec_args);
 }
