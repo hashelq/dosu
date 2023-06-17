@@ -7,23 +7,23 @@ LICENSE: MIT
 This is a sudo alternative in case you need a simple bloat-free program for this task.
 
 Environment:
-	DOSU_PROMPT to set custom prompt, for example:
+	DOSU_PROMPT to set a custom prompt, for example:
 
 	$ DOSU_PROMPT="[DOSU] Enter password: " dosu echo 123
 	[DOSU] Enter password:
 
 SECURITY:
-	I am not sure that this program is secure.
+	I am not sure if this program is secure.
 	Use at your own risk.
-	Also I recommend to take a look at the code before using it.
-	If a vulnerability found, please make an issue.
+	Also I recommend to take a look at the code before you start using it.
+	If a vulnerability found, please make an issue or a PR.
 
 SUID:
 	This program is intended to be run with +s permission (setuid).
-	Before using it, add +s and change owner to root: "chmod +s ./dosu ; chown root:root ./dosu"
+	Before start using it, add +s and change owner to root: "chmod +s ./dosu ; chown root:root ./dosu"
 
 This is a short program that
-	1. Checks if the user has group "dosu"
+	1. Checks if the user is in the group "dosu"
 	2. Checks if the entered password is correct for the user
 	3. Runs specified program as ROOT if all requirements above are meet.
 
