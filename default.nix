@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
   buildInputs = [ pkgs.libxcrypt ];
 
   buildPhase = ''
-      ${gcc}/bin/gcc ./dosu.c -o dosu -lxcrypt
+      ${gcc}/bin/gcc ./dosu.c -o dosu ${pkg-config --cflags libxcrypt}
   '';
 
   installPhase = ''
